@@ -15,7 +15,9 @@
         tools:targetApi="31">
         <activity
             android:name="com.showcase.movieapp.ui.DashboardActivity"
-            android:exported="true">
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="sensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

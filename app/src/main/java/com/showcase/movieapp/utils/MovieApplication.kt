@@ -12,6 +12,7 @@ class MovieApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // initialize koin modules
         startKoin {
             modules(koinModules)
         }

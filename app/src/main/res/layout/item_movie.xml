@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginVertical="12dp">
+
+        <ImageView
+            android:id="@+id/imgMoviePoster"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:src="@drawable/placeholder_for_missing_posters"
+            android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="h,1:1.49"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/txtMovieName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:fontFamily="@font/titilliumweb_light"
+            android:textColor="@color/color_secondary"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/imgMoviePoster"
+            app:layout_constraintStart_toStartOf="@id/imgMoviePoster"
+            app:layout_constraintTop_toBottomOf="@id/imgMoviePoster"
+            tools:text="Movie Title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

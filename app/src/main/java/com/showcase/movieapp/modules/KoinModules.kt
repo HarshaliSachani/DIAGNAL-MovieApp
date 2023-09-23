@@ -10,7 +10,7 @@ import org.koin.dsl.module
 
 
 /**
- * app kon module define here
+ * app koin module define here
  */
 val koinModules = module {
 
