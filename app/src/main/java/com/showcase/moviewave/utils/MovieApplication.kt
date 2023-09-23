@@ -1,7 +1,7 @@
-package com.showcase.movieapp.utils
+package com.showcase.moviewave.utils
 
 import android.app.Application
-import com.showcase.movieapp.modules.koinModules
+import com.showcase.moviewave.modules.koinModules
 import org.koin.core.context.startKoin
 
 /**

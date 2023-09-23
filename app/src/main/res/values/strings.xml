@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">MovieWave</string>
-    <string name="search_hint">search here</string>
+    <string name="search_hint">Search for title</string>
     <string name="title">Romantic Comedy</string>
+    <string name="no_search_data_msg">Couldn\'t find ##\n Try searching for another movie</string>
+    <string name="search_query_limit_msg">Please write 3 or more character to show search result.</string>
 </resources>

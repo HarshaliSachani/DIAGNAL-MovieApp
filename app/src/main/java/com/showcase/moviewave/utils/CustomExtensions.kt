@@ -1,4 +1,4 @@
-package com.showcase.movieapp.utils
+package com.showcase.moviewave.utils
 
 import android.app.Activity
 import android.content.res.Configuration
@@ -18,7 +18,7 @@ inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
 
 fun Activity.getGridSpan(): Int {
     return when (resources.configuration.orientation) {
-        Configuration.ORIENTATION_LANDSCAPE -> 6
+        Configuration.ORIENTATION_LANDSCAPE -> 7
         Configuration.ORIENTATION_PORTRAIT -> 3
         else -> 3
     }

@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.showcase.movieapp"
+    namespace = "com.showcase.moviewave"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.showcase.movieapp"
+        applicationId = "com.showcase.moviewave"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

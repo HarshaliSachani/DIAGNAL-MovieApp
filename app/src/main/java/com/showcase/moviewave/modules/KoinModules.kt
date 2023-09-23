@@ -1,6 +1,6 @@
-package com.showcase.movieapp.modules
+package com.showcase.moviewave.modules
 
-import com.showcase.movieapp.viewmodels.DashboardViewModel
+import com.showcase.moviewave.viewmodels.DashboardViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 

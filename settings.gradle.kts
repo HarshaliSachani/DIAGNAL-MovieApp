@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "MovieApp"
+rootProject.name = "moviewave"
 include(":app")
  

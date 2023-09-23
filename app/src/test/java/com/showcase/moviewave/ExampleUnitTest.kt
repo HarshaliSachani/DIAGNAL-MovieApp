@@ -1,4 +1,4 @@
-package com.showcase.movieapp
+package com.showcase.moviewave
 
 import org.junit.Test
 

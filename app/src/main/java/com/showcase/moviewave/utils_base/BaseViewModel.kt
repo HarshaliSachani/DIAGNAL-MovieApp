@@ -1,4 +1,4 @@
-package com.showcase.movieapp.utils_base
+package com.showcase.moviewave.utils_base
 
 import androidx.lifecycle.ViewModel
 

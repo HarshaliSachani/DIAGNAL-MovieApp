@@ -1,4 +1,4 @@
-package com.showcase.movieapp.ui
+package com.showcase.moviewave.ui
 
 import android.animation.Animator
 import android.content.res.Configuration
@@ -17,14 +17,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.showcase.movieapp.R
-import com.showcase.movieapp.adapters.MovieAdapter
-import com.showcase.movieapp.databinding.ActivityDashboardBinding
-import com.showcase.movieapp.models.Content
-import com.showcase.movieapp.utils.getGridSpan
-import com.showcase.movieapp.utils.parcelable
-import com.showcase.movieapp.utils_base.BaseActivity
-import com.showcase.movieapp.viewmodels.DashboardViewModel
+import com.showcase.moviewave.R
+import com.showcase.moviewave.adapters.MovieAdapter
+import com.showcase.moviewave.databinding.ActivityDashboardBinding
+import com.showcase.moviewave.models.Content
+import com.showcase.moviewave.utils.getGridSpan
+import com.showcase.moviewave.utils.parcelable
+import com.showcase.moviewave.utils_base.BaseActivity
+import com.showcase.moviewave.viewmodels.DashboardViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.ceil
 import kotlin.system.exitProcess
@@ -46,11 +46,23 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
     /**
      * pagination variables
      */
+    private val visibleThreshold = 5
     private var totalPage = 0
     private var currentPage = 1
     private var pageSize = 0
-    private val visibleThreshold = 5
     private var loadMore = false
+
+    var handlerForSearch = Handler(Looper.getMainLooper())
+    var runnableForSearch = Runnable {
+        dashboardViewModel.searchMovies(this, searchText)
+    }
+
+    private fun resetPagination() {
+        totalPage = 0
+        currentPage = 1
+        pageSize = 0
+        loadMore = false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +82,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setObserver() {
-        dashboardViewModel.movie.observe(this) {
+        dashboardViewModel.movieData.observe(this) {
             it?.let { movieData ->
                 if (movieData.page.pageNum.toInt() == 1) {
                     pageSize = movieData.page.pageSize.toInt()
@@ -79,6 +91,27 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
                 setCurrentPage(movieData.page.contentItems.content)
             }
         }
+
+        dashboardViewModel.searchMovieData.observe(this) {
+            it?.let {
+                if (it.isNotEmpty()) {
+                    binding.txtSearchMsg.isVisible = false
+                    resetPagination()
+                    setMovieAdapter(ArrayList(it), searchText)
+                } else {
+                    showNoSearchFoundMessage()
+                    setMovieAdapter(ArrayList())
+                }
+            } ?: run {
+                showNoSearchFoundMessage()
+                setMovieAdapter(ArrayList())
+            }
+        }
+    }
+
+    private fun showNoSearchFoundMessage() {
+        binding.txtSearchMsg.text = resources.getString(R.string.no_search_data_msg).replace("##", "'$searchText'")
+        binding.txtSearchMsg.isVisible = true
     }
 
     private fun bindViews() {
@@ -98,6 +131,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
         binding.searchInputText.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 // check search criteria on action button
+                v.text.trim().toString().also {
+                    if (it.length >= 3) {
+                        dashboardViewModel.searchMovies(this, it)
+                    }
+                }
             }
             false
         }
@@ -111,16 +149,30 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
 
             override fun afterTextChanged(s: Editable?) {
                 // check search criteria on type
+                if (s != null && s.length >= 3) {
+                    searchText = s.toString()
+                    handlerForSearch.removeCallbacks(runnableForSearch)
+                    handlerForSearch.postDelayed(runnableForSearch, 500)
+                } else if (binding.flSearchView.isVisible) {
+                    binding.txtSearchMsg.isVisible = true
+                    binding.txtSearchMsg.text = resources.getString(R.string.search_query_limit_msg)
+                }
             }
 
         })
 
     }
 
-    private fun setMovieAdapter(movieList: ArrayList<Content>) {
-        movieAdapter = MovieAdapter(this, movieList)
+    private fun setMovieAdapter(movieList: ArrayList<Content>, searchQuery: String = "") {
+        movieAdapter = MovieAdapter(this, movieList, searchQuery)
         binding.rclMovie.adapter = movieAdapter
     }
+
+    override fun onDestroy() {
+        handlerForSearch.removeCallbacks(runnableForSearch)
+        super.onDestroy()
+    }
+
 
     override fun onPause() {
         super.onPause()
@@ -170,7 +222,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 gridLayoutManager?.let {
-                    if (!loadMore && currentPage < totalPage && it.itemCount - it.childCount <= it.findFirstVisibleItemPosition() + visibleThreshold) {
+                    if (searchText.isEmpty() && !loadMore && currentPage < totalPage && it.itemCount - it.childCount <= it.findFirstVisibleItemPosition() + visibleThreshold) {
                         // load next page data form here
                         dashboardViewModel.getMovieDataFromAsset(this@DashboardActivity, currentPage + 1)
                         loadMore = true
@@ -186,24 +238,23 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
         binding.searchInputText.setText("")
         binding.flSearchView.isVisible = true
         val circularReveal = ViewAnimationUtils.createCircularReveal(
-            binding.flSearchView,
-            (binding.imgSearch.right + binding.imgSearch.left) / 2,
-            (binding.imgSearch.top + binding.imgSearch.bottom) / 2,
-            0f,
-            binding.toolbar.width.toFloat()
+            binding.flSearchView, (binding.imgSearch.right + binding.imgSearch.left) / 2, (binding.imgSearch.top + binding.imgSearch.bottom) / 2, 0f, binding.toolbar.width.toFloat()
         )
         circularReveal.duration = 300
         circularReveal.start()
+        binding.txtSearchMsg.isVisible = true
+        binding.txtSearchMsg.text = resources.getString(R.string.search_query_limit_msg)
+        showKeyboard(binding.searchInputText)
+
     }
 
     private fun hideSearchLayout(): Boolean {
         if (binding.flSearchView.isVisible) {
+            resetPagination()
+            dashboardViewModel.getMovieDataFromAsset(this, currentPage)
+
             val circularConceal = ViewAnimationUtils.createCircularReveal(
-                binding.flSearchView,
-                (binding.imgSearch.right + binding.imgSearch.left) / 2,
-                (binding.imgSearch.top + binding.imgSearch.bottom) / 2,
-                binding.toolbar.width.toFloat(),
-                0f
+                binding.flSearchView, (binding.imgSearch.right + binding.imgSearch.left) / 2, (binding.imgSearch.top + binding.imgSearch.bottom) / 2, binding.toolbar.width.toFloat(), 0f
             )
 
             circularConceal.duration = 200
@@ -213,6 +264,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
                 override fun onAnimationCancel(animation: Animator) = Unit
                 override fun onAnimationStart(animation: Animator) = Unit
                 override fun onAnimationEnd(animation: Animator) {
+                    binding.txtSearchMsg.isVisible = false
                     binding.flSearchView.isVisible = false
                     binding.searchInputText.setText("")
                     binding.searchInputText.text.clear()
@@ -231,8 +283,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
             binding.imgSearch -> openSearch()
             binding.closeOrClearSearch -> {
                 if (binding.searchInputText.text.isEmpty()) {
+                    hideKeyboard(binding.searchInputText)
                     hideSearchLayout()
                 } else {
+                    binding.txtSearchMsg.isVisible = false
                     binding.searchInputText.setText("")
                     binding.searchInputText.text.clear()
                     searchText = ""
@@ -246,5 +300,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    override fun onBackPressed() {
+        if (binding.flSearchView.isVisible) {
+            if (binding.searchInputText.text.isEmpty()) {
+                hideSearchLayout()
+            }
+        } else super.onBackPressed()
+    }
 
 }

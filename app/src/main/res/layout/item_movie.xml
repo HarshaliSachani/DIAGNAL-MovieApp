@@ -17,13 +17,13 @@
             android:id="@+id/imgMoviePoster"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:src="@drawable/placeholder_for_missing_posters"
             android:scaleType="fitXY"
             app:layout_constraintDimensionRatio="h,1:1.49"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/placeholder_for_missing_posters" />
 
         <TextView
             android:id="@+id/txtMovieName"
@@ -36,9 +36,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:fontFamily="@font/titilliumweb_light"
-            android:textColor="@color/color_secondary"
-            android:textSize="15sp"
+            android:textAppearance="@style/movieTitleTextAppearance"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/imgMoviePoster"
             app:layout_constraintStart_toStartOf="@id/imgMoviePoster"

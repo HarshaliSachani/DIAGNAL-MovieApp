@@ -1,4 +1,4 @@
-package com.showcase.movieapp.models
+package com.showcase.moviewave.models
 
 import com.google.gson.annotations.SerializedName
 
