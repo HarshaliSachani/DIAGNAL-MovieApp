@@ -20,6 +20,11 @@ Use `Gson` and `Glide` third party library.
 
 Distribute app via Firebase App Distribution
 
+Use `Firebase crashlytics` to keep track on crashes.
+
+Use `LeakCanary` to detect memory leak on debug mode.
+
+
 ## Features
 
 * Responsive UI design with portrait & Landscape orientations.
@@ -30,6 +35,7 @@ Distribute app via Firebase App Distribution
 * For long text added marquee effect to maintain UI consistency.
 * Showing 'placeholder' image when relevant image not found.
 * Highlight searched text in search listing screen.
+* Add buffer loading while loading next page data
 
 ## Compiling & Running
 

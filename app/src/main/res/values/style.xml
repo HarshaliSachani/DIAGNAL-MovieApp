@@ -13,4 +13,8 @@
         <item name="android:textColor">@color/color_secondary</item>
     </style>
 
+    <style name="progressBarStyle">
+        <item name="android:indeterminateTint">@color/color_secondary</item>
+    </style>
+
 </resources>

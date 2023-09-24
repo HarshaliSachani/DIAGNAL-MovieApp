@@ -25,6 +25,9 @@ class MovieAdapter(
         return MovieHolder(ItemMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
+    /**
+     * update adapter list while load new page
+     */
     fun updatePageItems(newPageList: List<Content>) {
         movieList.addAll(newPageList)
     }
@@ -41,6 +44,7 @@ class MovieAdapter(
             binding.txtMovieName.isSelected = true
             val fullText = content.name
             binding.txtMovieName.text = if (searchText.isNotEmpty()) {
+                // highlight searched text
                 val spannableString = SpannableString(fullText)
                 val startPos: Int = fullText.lowercase(Locale.US).indexOf(searchText.lowercase(Locale.US))
                 spannableString.setSpan(TextAppearanceSpan(mActivity, R.style.searchHighlightTextAppearance), startPos, startPos + searchText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

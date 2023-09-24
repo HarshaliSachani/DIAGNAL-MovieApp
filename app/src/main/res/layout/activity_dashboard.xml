@@ -22,13 +22,25 @@
             android:background="@color/color_primary"
             android:clipToPadding="false"
             android:paddingTop="45dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/pbLoadMovie"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/item_movie" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadMovie"
+            style="@style/progressBarStyle"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="5dp"
+            android:indeterminate="true"
+            android:indeterminateBehavior="cycle"
+            android:padding="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/rclMovie"
+            app:layout_constraintStart_toStartOf="@id/rclMovie" />
 
         <TextView
             android:id="@+id/txtSearchMsg"
@@ -45,7 +57,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -121,9 +133,10 @@
                         android:autofillHints="name"
                         android:clickable="true"
                         android:focusable="true"
+                        android:maxLength="100"
                         android:fontFamily="@font/titilliumweb_light"
                         android:hint="@string/search_hint"
-                        android:imeOptions="actionSearch"
+                        android:imeOptions="actionSearch|flagNoExtractUi"
                         android:inputType="text"
                         android:textColor="@color/white"
                         android:textColorHint="@color/color_secondary" />

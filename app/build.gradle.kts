@@ -40,8 +40,8 @@ android {
     productFlavors {
         create("production") {
             applicationId = "com.showcase.moviewave"
-            versionCode = 2
-            versionName = "1.1"
+            versionCode = 3
+            versionName = "1.2"
         }
         create("dev") {
             applicationId = "com.showcase.moviewave"
@@ -63,7 +63,7 @@ android {
             firebaseAppDistribution {
                 artifactType = "APK"
 //                releaseNotes = "Release notes"
-                releaseNotesFile = "releasenotes/version-1.1(2).txt"
+                releaseNotesFile = "app/releasenotes/version-1.2(3).txt"
                 testers = "harshalisachani@gmail.com"
             }
         }
@@ -128,4 +128,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
+
+    // debugImplementation because LeakCanary should only run in debug builds.
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
+
 }

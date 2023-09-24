@@ -52,6 +52,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
     private var pageSize = 0
     private var loadMore = false
 
+    /**
+     * runnable-handler to avoid multiple search query execution
+     */
     var handlerForSearch = Handler(Looper.getMainLooper())
     var runnableForSearch = Runnable {
         dashboardViewModel.searchMovies(this, searchText)
@@ -83,6 +86,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
 
     private fun setObserver() {
         dashboardViewModel.movieData.observe(this) {
+            binding.pbLoadMovie.isVisible = false
             it?.let { movieData ->
                 if (movieData.page.pageNum.toInt() == 1) {
                     pageSize = movieData.page.pageSize.toInt()
@@ -199,7 +203,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
             if (loadMore) {
                 // handle pagination data in adapter
                 loadMore = false
-                val initialSize = (currentPage * pageSize) - 1
+                val initialSize = (currentPage * pageSize)
                 movieAdapter?.updatePageItems(currentPageList)
                 Log.e(TAG, "setCurrentPage: item range initialSize=$initialSize   updatedSize=${currentPageList.size}")
                 movieAdapter?.notifyItemRangeInserted(initialSize, currentPageList.size)
@@ -224,8 +228,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
                 gridLayoutManager?.let {
                     if (searchText.isEmpty() && !loadMore && currentPage < totalPage && it.itemCount - it.childCount <= it.findFirstVisibleItemPosition() + visibleThreshold) {
                         // load next page data form here
-                        dashboardViewModel.getMovieDataFromAsset(this@DashboardActivity, currentPage + 1)
                         loadMore = true
+                        binding.pbLoadMovie.isVisible = true
+                        dashboardViewModel.getMovieDataFromAsset(this@DashboardActivity, currentPage + 1)
                     }
                 }
             }
@@ -295,13 +300,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener {
 
             binding.imgBack -> {
                 this@DashboardActivity.finishAffinity()
-                exitProcess(0)
             }
         }
     }
 
     override fun onBackPressed() {
         if (binding.flSearchView.isVisible) {
+            // hide search layout on back press if visible
             if (binding.searchInputText.text.isEmpty()) {
                 hideSearchLayout()
             }
