@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.appdistribution")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -17,12 +20,70 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "moviewave"
+            keyPassword = "dzuw3FR57e3e3EATaefruPu2rECtHd7E"
+            storeFile = file("keys/release.jks")
+            storePassword = "fat7Raq24uwEGr2Weu8ubarewEhu5aya"
+        }
+
+        getByName("debug") {
+            keyAlias = "moviewave"
+            keyPassword = "dzuw3FR57e3e3EATaefruPu2rECtHd7E"
+            storeFile = file("keys/release.jks")
+            storePassword = "fat7Raq24uwEGr2Weu8ubarewEhu5aya"
+        }
+    }
+
+    flavorDimensions.add("version")
+    productFlavors {
+        create("production") {
+            applicationId = "com.showcase.moviewave"
+            versionCode = 2
+            versionName = "1.1"
+        }
+        create("dev") {
+            applicationId = "com.showcase.moviewave"
+            versionCode = 1
+            versionName = "1.0"
+        }
+    }
+
     buildTypes {
         release {
+            isMinifyEnabled = true
+            isShrinkResources = false
+            multiDexEnabled = true
+            isDebuggable = false
+
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            firebaseAppDistribution {
+                artifactType = "APK"
+//                releaseNotes = "Release notes"
+                releaseNotesFile = "releasenotes/version-1.1(2).txt"
+                testers = "harshalisachani@gmail.com"
+            }
+        }
+
+        debug {
             isMinifyEnabled = false
+            isShrinkResources = false
+            isDebuggable = true
+
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
+//                applicationVariants.all { variant ->
+//                val flavor = variant.productFlavors[0].name
+//                val version = variant.versionName
+//                outputFileName = "MovieWave-${flavor}-v${version}.apk"
+//            }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -63,4 +124,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.10.0")
 
+    // Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }

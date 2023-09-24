@@ -1,0 +1,15 @@
+Version 1.1(2)
+
+- This app contains responsive UI and data listing with pagination from local json and search functionality.
+- Added README file for more details
+- Distribute app with Firebase App Distribution
+
+NOTE:
+1. In Exports folder screenshot it showing 5 columns for landscape orientation and in README file it shows 7 column so I have set 7 column for  landscape orientation.
+2. New data will be fetch pagination wise while scrolling.
+3. As in this app data will be fetch from local json file. here to make searching and data listing process smooth we can also store all the data in local database and make easy query for searching. but as per README file all JSON pages should not fetch at once so I have manage it dynamicaly.
+4. For long movie title I have used marquee effect
+5. Showing 'placeholder_for_missing_posters' image when relevant poster-image not found
+6. For searching mostly application open new screen but as per Exports folder images it looks like search should be perfom on same screen where all data  listed. So I have manage searching in same screen.
+7. Show search highlight text in search listing
+8. As per requirement search should be perform if query contains 3 or more characters so, display appropriate message while searching
