@@ -47,3 +47,7 @@ Use `LeakCanary` to detect memory leak on debug mode.
 
 * Implemented Firebase App Distribution for distribute app to testers
 * Update release note inside `releasenotes/version-1.0(1)` folder with `version` and specify details in `firebaseAppDistribution` block in `buildTypes-release` variant.
+
+
+https://github.com/HarshaliSachani/MovieWave/assets/84327237/18bfa8f2-d774-4784-901c-8df0e4d5f4ba
+
